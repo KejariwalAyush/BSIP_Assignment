@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:bill_seperator/models/contact_details.dart';
 import 'package:bill_seperator/providers/bills_provider.dart';
 import 'package:bill_seperator/views/components/edit_ratio.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -56,7 +59,20 @@ class BillDetailPage extends StatelessWidget {
                   },
                   icon: const Icon(Icons.person_add));
             }),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.add_a_photo))
+            Consumer<BillListProvider>(builder: (_, provider, __) {
+              return IconButton(
+                onPressed: () async {
+                  final _imagePicker = ImagePicker();
+
+                  var _pickedFile =
+                      await _imagePicker.pickImage(source: ImageSource.camera);
+                  File _imageFilePicked = File(_pickedFile!.path);
+                  print(_imageFilePicked.path);
+                  provider.addImage(bill, _imageFilePicked.path);
+                },
+                icon: const Icon(Icons.add_a_photo),
+              );
+            }),
           ],
         ),
         body: Consumer<BillListProvider>(builder: (context, provider, __) {
@@ -151,8 +167,35 @@ class BillDetailPage extends StatelessWidget {
                   ),
                 ],
               ),
-              Column(
-                children: const [],
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    for (var imgPath in provider.bill(bill.id).images)
+                      Dismissible(
+                        key: Key(imgPath),
+                        direction: DismissDirection.endToStart,
+                        background: Container(
+                          color: Colors.red,
+                          padding: const EdgeInsets.all(8.0),
+                          child: const Align(
+                              alignment: Alignment.centerRight,
+                              child: Icon(Icons.delete_rounded)),
+                        ),
+                        onDismissed: (dir) =>
+                            provider.deleteImage(bill, imgPath),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 5, vertical: 15),
+                          height: 400,
+                          width: MediaQuery.of(context).size.width,
+                          child: Image.file(
+                            File(imgPath),
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ],
           );

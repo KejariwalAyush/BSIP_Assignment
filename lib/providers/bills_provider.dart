@@ -6,7 +6,6 @@ import '../models/models.dart';
 
 class BillListProvider extends ChangeNotifier {
   final List<Bill> _bills = [];
-  final TextEditingController tec = TextEditingController();
 
   List<Bill> get bills => _bills;
   Bill bill(int id) => _bills.firstWhere((e) => e.id == id);
@@ -44,7 +43,9 @@ class BillListProvider extends ChangeNotifier {
 
   void addContact(Bill bill, Contact con) {
     ContactDetails contact = ContactDetails(
-        phone: con.phones == null ? "" : con.phones!.first.toString(),
+        phone: con.phones == null || con.phones!.isEmpty
+            ? ""
+            : con.phones!.first.toString(),
         name: con.displayName ?? "No name",
         ratio: 1);
     if (bill.contacts
@@ -52,6 +53,16 @@ class BillListProvider extends ChangeNotifier {
         .isEmpty) {
       bill.contacts.add(contact);
     }
+    notifyListeners();
+  }
+
+  void addImage(Bill bill, String imgPath) {
+    bill.images.add(imgPath);
+    notifyListeners();
+  }
+
+  void deleteImage(Bill bill, String imgPath) {
+    bill.images.remove(imgPath);
     notifyListeners();
   }
 
