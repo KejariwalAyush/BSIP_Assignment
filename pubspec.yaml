@@ -1,0 +1,24 @@
+name: bill_seperator
+description: A new Flutter project.
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.16.0 <3.0.0"
+
+dependencies:
+  contacts_service: ^0.6.3
+  flutter:
+    sdk: flutter
+  intl: ^0.17.0
+  permission_handler: ^9.2.0
+  provider: ^6.0.2
+  url_launcher: ^6.0.20
+
+dev_dependencies:
+  flutter_lints: ^1.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
