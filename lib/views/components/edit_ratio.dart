@@ -1,7 +1,5 @@
-import 'package:bill_seperator/models/contact_details.dart';
 import 'package:bill_seperator/models/models.dart';
 import 'package:bill_seperator/providers/bills_provider.dart';
-import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

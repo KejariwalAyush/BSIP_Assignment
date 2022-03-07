@@ -1,6 +1,5 @@
 import 'package:bill_seperator/models/contact_details.dart';
 import 'package:bill_seperator/models/entry.dart';
-import 'package:contacts_service/contacts_service.dart';
 
 class Bill {
   final int id;
@@ -34,7 +33,7 @@ class Bill {
         id: json["id"],
         title: json["title"],
         contacts: List<ContactDetails>.from(
-            json["contacts"].map((x) => Contact.fromMap(x))),
+            json["contacts"].map((x) => ContactDetails.fromMap(x))),
         createdAt: DateTime.parse(json["createdAt"]),
         entries: List<Entry>.from(json["entries"].map((x) => Entry.fromMap(x))),
         categories: List<String>.from(json["categories"].map((x) => x)),
@@ -46,7 +45,7 @@ class Bill {
         "title": title,
         "amount": amount,
         "contacts": List<dynamic>.from(contacts.map((x) => x.toMap())),
-        "createdAt": createdAt,
+        "createdAt": createdAt.toIso8601String(),
         "entries": List<dynamic>.from(entries.map((x) => x.toMap())),
         "categories": List<String>.from(categories.map((x) => x)),
         "images": List<String>.from(images.map((x) => x)),

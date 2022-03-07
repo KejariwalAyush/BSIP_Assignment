@@ -3,6 +3,7 @@ import 'package:bill_seperator/views/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+const String kFileName = 'bills_db.json';
 void main() {
   runApp(const MyApp());
 }

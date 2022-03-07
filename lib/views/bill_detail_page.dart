@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:bill_seperator/models/contact_details.dart';
 import 'package:bill_seperator/providers/bills_provider.dart';
 import 'package:bill_seperator/views/components/edit_ratio.dart';
 import 'package:contacts_service/contacts_service.dart';
