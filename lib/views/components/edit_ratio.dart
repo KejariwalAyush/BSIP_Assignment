@@ -1,3 +1,4 @@
+import 'package:bill_seperator/models/contact_details.dart';
 import 'package:bill_seperator/models/models.dart';
 import 'package:bill_seperator/providers/bills_provider.dart';
 import 'package:contacts_service/contacts_service.dart';
@@ -11,7 +12,7 @@ class EditRatioButton extends StatefulWidget {
     required this.contact,
   }) : super(key: key);
   final Bill bill;
-  final Contact contact;
+  final ContactDetails contact;
 
   @override
   State<EditRatioButton> createState() => _EditRatioButtonState();

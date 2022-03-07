@@ -1,3 +1,4 @@
+import 'package:bill_seperator/models/contact_details.dart';
 import 'package:bill_seperator/providers/bills_provider.dart';
 import 'package:bill_seperator/views/components/edit_ratio.dart';
 import 'package:contacts_service/contacts_service.dart';
@@ -15,10 +16,9 @@ class BillDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
-          centerTitle: true,
           title: Text(bill.title),
           bottom: const TabBar(tabs: [
             Tab(
@@ -28,7 +28,11 @@ class BillDetailPage extends StatelessWidget {
             Tab(
               child: Text("Contacts"),
               icon: Icon(Icons.contacts_rounded),
-            )
+            ),
+            Tab(
+              child: Text("Images"),
+              icon: Icon(Icons.image),
+            ),
           ]),
           actions: [
             AddEntryIconButton(bill: bill),
@@ -52,6 +56,7 @@ class BillDetailPage extends StatelessWidget {
                   },
                   icon: const Icon(Icons.person_add));
             }),
+            IconButton(onPressed: () {}, icon: const Icon(Icons.add_a_photo))
           ],
         ),
         body: Consumer<BillListProvider>(builder: (context, provider, __) {
@@ -77,11 +82,7 @@ class BillDetailPage extends StatelessWidget {
                           onDismissed: (dir) =>
                               provider.deleteEntry(bill, entry),
                           child: ListTile(
-                            title: Text(
-                              entry.title,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            ),
+                            title: Text(entry.title),
                             subtitle: Text("Qty: ${entry.quantity}"),
                             trailing: Text(entry.cost.toStringAsFixed(2)),
                           ),
@@ -104,13 +105,10 @@ class BillDetailPage extends StatelessWidget {
                     child: ListView.builder(
                       itemCount: provider.bill(bill.id).contacts.length,
                       itemBuilder: (context, index) {
-                        MapEntry<Contact, double> contact = provider
-                            .bill(bill.id)
-                            .contacts
-                            .entries
-                            .elementAt(index);
+                        ContactDetails contact =
+                            provider.bill(bill.id).contacts[index];
                         return Dismissible(
-                          key: Key(contact.key.displayName.toString()),
+                          key: Key(contact.name),
                           direction: DismissDirection.endToStart,
                           background: Container(
                             color: Colors.red,
@@ -120,24 +118,23 @@ class BillDetailPage extends StatelessWidget {
                                 child: Icon(Icons.delete_rounded)),
                           ),
                           onDismissed: (dir) =>
-                              provider.deleteContact(bill, contact.key),
+                              provider.deleteContact(bill, contact),
                           child: ListTile(
                             title: Text(
-                              contact.key.displayName ?? "No Name",
+                              contact.name,
                               style:
                                   const TextStyle(fontWeight: FontWeight.bold),
                             ),
                             subtitle: Row(
                               children: [
                                 Text("Ratio: " +
-                                    contact.value.toStringAsFixed(1)),
+                                    contact.ratio.toStringAsFixed(1)),
                                 // const SizedBox(width: 2),
-                                EditRatioButton(
-                                    bill: bill, contact: contact.key),
+                                EditRatioButton(bill: bill, contact: contact),
                               ],
                             ),
                             trailing: Text((provider.bill(bill.id).amount *
-                                    (contact.value /
+                                    (contact.ratio /
                                         provider.bill(bill.id).getRatioTotal()))
                                 .toStringAsFixed(2)),
                           ),
@@ -153,6 +150,9 @@ class BillDetailPage extends StatelessWidget {
                             provider.bill(bill.id).amount.toStringAsFixed(2))),
                   ),
                 ],
+              ),
+              Column(
+                children: const [],
               ),
             ],
           );

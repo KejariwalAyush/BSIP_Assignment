@@ -47,8 +47,21 @@ class HomePage extends StatelessWidget {
                       bill.title,
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    subtitle:
+                    subtitle: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Text(DateFormat.yMMMMEEEEd().format(bill.createdAt)),
+                        Wrap(
+                          alignment: WrapAlignment.start,
+                          crossAxisAlignment: WrapCrossAlignment.start,
+                          children: [
+                            for (String label in bill.categories)
+                              if (label.trim() != "") Chip(label: Text(label)),
+                          ],
+                        )
+                      ],
+                    ),
                     trailing: Text(bill.amount.toStringAsFixed(2)),
                   ),
                 );
@@ -60,63 +73,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-
-// class HomePage extends StatefulWidget {
-//   const HomePage({Key? key}) : super(key: key);
-
-//   @override
-//   State<HomePage> createState() => _HomePageState();
-// }
-
-// class _HomePageState extends State<HomePage> {
-//   int i = 0;
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         centerTitle: true,
-//         title: const Text("Bill Splitter"),
-//       ),
-//       floatingActionButton: FloatingActionButton(
-//           onPressed: () {
-//             i++;
-//             setState(() {
-//               Bill bill = Bill(title: "$i");
-//               billList.addBill(bill);
-//               bill.addEntry(Entry(cost: 5000, quantity: 2, title: "Resturant"));
-//               bill.addEntry(Entry(cost: 1000, title: "Resturant"));
-//             });
-//           },
-//           child: const Icon(Icons.add)),
-//       body: ListView.builder(
-//         itemCount: billList._bills.length,
-//         itemBuilder: (context, index) {
-//           Bill bill = billList._bills[index];
-//           return Dismissible(
-//             key: Key(bill.title),
-//             direction: DismissDirection.endToStart,
-//             background: Container(
-//               color: Colors.red,
-//               padding: const EdgeInsets.all(8.0),
-//               child: const Align(
-//                   alignment: Alignment.centerRight,
-//                   child: Icon(Icons.delete_rounded)),
-//             ),
-//             onDismissed: (dir) {
-//               billList.deleteBill(bill);
-//               setState(() {});
-//             },
-//             child: ListTile(
-//               onTap: () => Navigator.of(context).push(MaterialPageRoute(
-//                 builder: (context) => BillDetailPage(bill),
-//               )),
-//               title: Text(bill.title),
-//               subtitle: Text(DateFormat.yMEd().format(bill.createdAt)),
-//               trailing: Text(bill.amount.toStringAsFixed(2)),
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }

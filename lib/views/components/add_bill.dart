@@ -12,19 +12,19 @@ class AddBillIconButton extends StatefulWidget {
 }
 
 class _AddBillIconButtonState extends State<AddBillIconButton> {
-  // String _text = "Title";
-  // double cost = 0;
-  // int quantity = 1;
   late TextEditingController _ct;
+  late TextEditingController _cc;
   @override
   initState() {
     _ct = TextEditingController();
+    _cc = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
     _ct.dispose();
+    _cc.dispose();
     super.dispose();
   }
 
@@ -53,6 +53,13 @@ class _AddBillIconButtonState extends State<AddBillIconButton> {
                           controller: _ct,
                           keyboardType: TextInputType.text,
                         ),
+                        TextField(
+                          decoration: const InputDecoration(
+                              hintText: "Sepecate by ','",
+                              label: Text("Categories")),
+                          controller: _cc,
+                          keyboardType: TextInputType.text,
+                        ),
                         ElevatedButton(
                           child: const Text("Add Bill"),
                           onPressed: () {
@@ -60,7 +67,7 @@ class _AddBillIconButtonState extends State<AddBillIconButton> {
                               Navigator.pop(context);
                               return;
                             }
-                            provider.addBill(_ct.text);
+                            provider.addBill(_ct.text, _cc.text.split(","));
                             _ct.clear();
                             Navigator.pop(context);
                           },

@@ -1,3 +1,4 @@
+import 'package:bill_seperator/models/contact_details.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -10,8 +11,16 @@ class BillListProvider extends ChangeNotifier {
   List<Bill> get bills => _bills;
   Bill bill(int id) => _bills.firstWhere((e) => e.id == id);
 
-  void addBill(String title) {
-    Bill bill = Bill(id: _bills.isEmpty ? 0 : _bills.last.id + 1, title: title);
+  void addBill(String title, List<String> categories) {
+    Bill bill = Bill(
+      id: _bills.isEmpty ? 0 : _bills.last.id + 1,
+      title: title,
+      categories: categories,
+      contacts: [],
+      createdAt: DateTime.now(),
+      entries: [],
+      images: [],
+    );
     _bills.add(bill);
     notifyListeners();
   }
@@ -34,19 +43,26 @@ class BillListProvider extends ChangeNotifier {
   }
 
   void addContact(Bill bill, Contact con) {
-    if (!bill.contacts.keys.any((ele) => ele.displayName == con.displayName)) {
-      bill.contacts.putIfAbsent(con, () => 1);
+    ContactDetails contact = ContactDetails(
+        phone: con.phones == null ? "" : con.phones!.first.toString(),
+        name: con.displayName ?? "No name",
+        ratio: 1);
+    if (bill.contacts
+        .where((element) => element.name == con.displayName)
+        .isEmpty) {
+      bill.contacts.add(contact);
     }
     notifyListeners();
   }
 
-  void deleteContact(Bill bill, Contact contact) {
+  void deleteContact(Bill bill, ContactDetails contact) {
     bill.contacts.remove(contact);
     notifyListeners();
   }
 
-  void updateContactRatio(Bill bill, Contact contact, double ratio) {
-    bill.contacts.update(contact, (value) => ratio);
+  void updateContactRatio(Bill bill, ContactDetails contact, double ratio) {
+    // bill.contacts.where((element) => element == contact).first
+    contact.ratio = ratio;
     notifyListeners();
   }
 }
