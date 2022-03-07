@@ -84,9 +84,17 @@ class _AddEntryIconButtonState extends State<AddEntryIconButton> {
                         ElevatedButton(
                           child: const Text("Save"),
                           onPressed: () {
+                            if (_ct.text.trim() == "" || _cc.text == "") {
+                              Navigator.pop(context);
+                              return;
+                            }
                             int qty =
                                 int.parse(_cq.text == "" ? "1" : _cq.text);
                             Entry entry = Entry(
+                                id: provider.bill(bill.id).entries.isEmpty
+                                    ? 0
+                                    : provider.bill(bill.id).entries.last.id +
+                                        1,
                                 title: _ct.text,
                                 cost: double.parse(_cc.text) * qty,
                                 quantity: qty);

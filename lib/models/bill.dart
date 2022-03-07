@@ -17,4 +17,12 @@ class Bill {
     entries = [];
     contacts = {};
   }
+
+  double getRatioTotal() {
+    double cnt = 0;
+    for (var val in contacts.values) {
+      cnt += val;
+    }
+    return cnt;
+  }
 }

@@ -43,7 +43,10 @@ class HomePage extends StatelessWidget {
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => BillDetailPage(bill),
                     )),
-                    title: Text(bill.title),
+                    title: Text(
+                      bill.title,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     subtitle:
                         Text(DateFormat.yMMMMEEEEd().format(bill.createdAt)),
                     trailing: Text(bill.amount.toStringAsFixed(2)),

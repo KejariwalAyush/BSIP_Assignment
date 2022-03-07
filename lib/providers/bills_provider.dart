@@ -17,7 +17,6 @@ class BillListProvider extends ChangeNotifier {
   }
 
   void deleteBill(Bill bill) {
-    // Bill bill = _bills.where((element) => element.id == id).first;
     _bills.remove(bill);
     notifyListeners();
   }
@@ -28,20 +27,20 @@ class BillListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeEntry(Bill bill, Entry entry) {
+  void deleteEntry(Bill bill, Entry entry) {
     bill.amount -= entry.cost;
     bill.entries.remove(entry);
     notifyListeners();
   }
 
-  void addContacts(Bill bill, List<Contact> phoneContacts) {
-    for (var con in phoneContacts) {
+  void addContact(Bill bill, Contact con) {
+    if (!bill.contacts.keys.any((ele) => ele.displayName == con.displayName)) {
       bill.contacts.putIfAbsent(con, () => 1);
     }
     notifyListeners();
   }
 
-  void deleteContacts(Bill bill, Contact contact) {
+  void deleteContact(Bill bill, Contact contact) {
     bill.contacts.remove(contact);
     notifyListeners();
   }

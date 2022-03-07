@@ -1,4 +1,5 @@
 import 'package:bill_seperator/providers/bills_provider.dart';
+import 'package:bill_seperator/views/components/edit_ratio.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -46,7 +47,8 @@ class BillDetailPage extends StatelessWidget {
                     }
                     List<Contact> contacts = await ContactsService.getContacts(
                         withThumbnails: false);
-                    provider.addContacts(bill, contacts);
+                    Contact contact = await dropdownDialog(context, contacts);
+                    provider.addContact(bill, contact);
                   },
                   icon: const Icon(Icons.person_add));
             }),
@@ -62,10 +64,27 @@ class BillDetailPage extends StatelessWidget {
                       itemCount: provider.bill(bill.id).entries.length,
                       itemBuilder: (context, index) {
                         Entry entry = provider.bill(bill.id).entries[index];
-                        return ListTile(
-                          title: Text(entry.title),
-                          subtitle: Text("Qty: ${entry.quantity}"),
-                          trailing: Text(entry.cost.toStringAsFixed(2)),
+                        return Dismissible(
+                          key: Key(entry.id.toString()),
+                          direction: DismissDirection.endToStart,
+                          background: Container(
+                            color: Colors.red,
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Align(
+                                alignment: Alignment.centerRight,
+                                child: Icon(Icons.delete_rounded)),
+                          ),
+                          onDismissed: (dir) =>
+                              provider.deleteEntry(bill, entry),
+                          child: ListTile(
+                            title: Text(
+                              entry.title,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: Text("Qty: ${entry.quantity}"),
+                            trailing: Text(entry.cost.toStringAsFixed(2)),
+                          ),
                         );
                       },
                     ),
@@ -90,13 +109,38 @@ class BillDetailPage extends StatelessWidget {
                             .contacts
                             .entries
                             .elementAt(index);
-                        return ListTile(
-                          title: Text(contact.key.displayName ?? "No Name"),
-                          subtitle: Text(contact.value.toStringAsFixed(1)),
-                          trailing: Text((provider.bill(bill.id).amount *
-                                  (contact.value /
-                                      provider.bill(bill.id).contacts.length))
-                              .toStringAsFixed(2)),
+                        return Dismissible(
+                          key: Key(contact.key.displayName.toString()),
+                          direction: DismissDirection.endToStart,
+                          background: Container(
+                            color: Colors.red,
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Align(
+                                alignment: Alignment.centerRight,
+                                child: Icon(Icons.delete_rounded)),
+                          ),
+                          onDismissed: (dir) =>
+                              provider.deleteContact(bill, contact.key),
+                          child: ListTile(
+                            title: Text(
+                              contact.key.displayName ?? "No Name",
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: Row(
+                              children: [
+                                Text("Ratio: " +
+                                    contact.value.toStringAsFixed(1)),
+                                // const SizedBox(width: 2),
+                                EditRatioButton(
+                                    bill: bill, contact: contact.key),
+                              ],
+                            ),
+                            trailing: Text((provider.bill(bill.id).amount *
+                                    (contact.value /
+                                        provider.bill(bill.id).getRatioTotal()))
+                                .toStringAsFixed(2)),
+                          ),
                         );
                       },
                     ),
@@ -115,5 +159,57 @@ class BillDetailPage extends StatelessWidget {
         }),
       ),
     );
+  }
+
+  Future<Contact> dropdownDialog(
+    BuildContext context,
+    List<Contact> contacts,
+  ) async {
+    Contact choice = contacts.first;
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          title: const Text("Choose Contact"),
+          content: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return DropdownButton<Contact>(
+              hint: const Text("--"),
+              value: choice,
+              items: contacts
+                  .map((value) {
+                    return DropdownMenuItem<Contact>(
+                      value: value,
+                      child: Text(value.displayName.toString()),
+                    );
+                  })
+                  .toSet()
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  choice = value!;
+                });
+              },
+            );
+          }),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text(
+                "Ok",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+    return choice;
   }
 }
