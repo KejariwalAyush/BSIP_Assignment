@@ -1,16 +1,26 @@
-# bill_seperator
+# Bill Splitter
 
-A new Flutter project.
+Bill Splitter is a simple app which will help you add a bill amount, tags, images & add multiple contacts in that particular bill & split the amout among them.
 
-## Getting Started
+This app uses Flutter, Provider, contacts_service.
 
-This project is a starting point for a Flutter application.
+## Features
 
-A few resources to get you started if this is your first Flutter project:
+ - Add bill images
+ - Add contacts from your local contact list
+ - Split bill according to the ratio
+ - Add list of items inside a particular bill
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## TODO
+- Update it to mordern UI
+- Add google auth with firebase 
+- Sync data with firestore & firebase storage
+- Add email address in your bill to add them as contributor
+- Add web version as well
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+## Contributing
+1st clone this repo & try 'n' run it in your system understand the basic code.
+Then add comment on the issue or create one and ask me to assign you that issue then you can proceed to work on it.
+Now start coding & when you finish fixing the issue make a PR.
+I will review your PR & will merge it if everything works fine.
