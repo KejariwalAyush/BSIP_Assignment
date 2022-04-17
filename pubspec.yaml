@@ -24,3 +24,19 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - asset/images/
+
+  fonts:
+    - family: BebasNeue
+      fonts:
+        - asset: asset/fonts/BebasNeue-Regular.ttf
+    - family: Lobster
+      fonts:
+        - asset: asset/fonts/Lobster-Regular.ttf
+    - family: Signatra
+      fonts:
+        - asset: asset/fonts/Signatra.ttf
+    - family: VarelaRound
+      fonts:
+        - asset: asset/fonts/VarelaRound-Regular.ttf
