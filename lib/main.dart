@@ -1,5 +1,6 @@
 import 'package:bill_seperator/providers/bills_provider.dart';
 import 'package:bill_seperator/views/home_page.dart';
+import 'package:bill_seperator/views/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,11 +17,13 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider<BillListProvider>(
       create: (context) => BillListProvider(),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const HomePage(),
+        home: const SplashScreen()
+        // HomePage(),
       ),
     );
   }
